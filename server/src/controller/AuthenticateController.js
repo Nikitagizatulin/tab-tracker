@@ -9,7 +9,6 @@ module.exports = {
       res.status(400).send({
         error: 'This email address already in use.'
       })
-      // email already exist
     }
   }
 }
