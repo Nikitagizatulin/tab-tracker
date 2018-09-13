@@ -8,7 +8,6 @@ module.exports = {
         new RegExp('^[a-zA-Zа-яА-ЯёЁ0-9]{8,32}$')
       )
     }
-    console.log(Joi.validate(req.body, shema))
     Joi.validate(req.body, shema)
       .then(() => {
         next()

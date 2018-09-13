@@ -3,8 +3,10 @@
     <v-app>
       <page-header/>
       <main>
-        <v-container fluid>
-          <router-view/>
+        <v-container fluid >
+          <v-scale-transition hide-on-leave>
+            <router-view/>
+          </v-scale-transition>
         </v-container>
       </main>
     </v-app>
