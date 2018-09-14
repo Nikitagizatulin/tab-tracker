@@ -1,11 +1,7 @@
 <template>
     <v-layout row>
         <v-flex xs6 offset-xs3>
-            <div class="white elevation-2">
-                <v-toolbar flat dense class="cyan" dark>
-                    <v-toolbar-title>Login</v-toolbar-title>
-                </v-toolbar>
-                <div class="pl-4 pr-4 pt-2 pb-2">
+            <panel title="Login">
                     <form name="tab-tracker-form"
                           autocomplete="off">
                         <v-text-field
@@ -32,14 +28,14 @@
                            @click.prevent="login">
                         Login
                     </v-btn>
-                </div>
-            </div>
+            </panel>
         </v-flex>
     </v-layout>
 </template>
 
 <script>
 import AutenticationService from '@/services/AuthenticationService'
+import Panel from '@/components/Panel'
 
 export default {
   data () {
@@ -59,10 +55,12 @@ export default {
         this.$store.dispatch('setToken', response.data.token)
         this.$store.dispatch('setUser', response.data.user)
       } catch (err) {
-        console.log(err)
-        this.error = err
+        this.error = err.response.data.error || 'Something went wrong! Please reload the page.'
       }
     }
+  },
+  components: {
+    Panel
   }
 }
 </script>
