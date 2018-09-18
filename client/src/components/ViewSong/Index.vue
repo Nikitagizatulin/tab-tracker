@@ -1,0 +1,49 @@
+<template>
+    <div>
+        <v-layout>
+            <v-flex xs6>
+                <song-metadata :song="song"/>
+            </v-flex>
+            <v-flex xs6
+                    class="ml-2">
+                <you-tube :youtubeId="song.youTubeId"/>
+            </v-flex>
+        </v-layout>
+
+        <v-layout class="mt-3">
+            <v-flex xs6>
+                <tab :song="song"/>
+            </v-flex>
+            <v-flex xs6>
+                <lyric :song="song"/>
+            </v-flex>
+        </v-layout>
+    </div>
+</template>
+<script>
+import SongMetadata from './SongMetadata'
+import Tab from './Tab'
+import Lyric from './Lyric'
+import SongService from '@/services/SongService'
+const YouTube = () => import('./YouTube')
+
+export default {
+  data () {
+    return {
+      song: {}
+    }
+  },
+  async mounted () {
+    const songId = this.$store.state.route.params.songId
+    this.song = (await SongService.show(songId)).data
+  },
+  components: {
+    SongMetadata,
+    YouTube,
+    Lyric,
+    Tab
+  }
+}
+</script>
+<style scoped>
+</style>

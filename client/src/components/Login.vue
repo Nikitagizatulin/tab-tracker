@@ -7,19 +7,23 @@
                         <v-text-field
                                 label="Email address"
                                 v-model="email"
+                                required
+                                :rules="[required]"
                                 autocomplete="username"
                         ></v-text-field>
                         <br>
                         <v-text-field
                                 label="Password"
                                 v-model="password"
+                                required
+                                :rules="[required]"
                                 type="password"
                                 autocomplete="new-password"
                         ></v-text-field>
                     </form>
                     <br>
                     <div v-html="error"
-                         class="error">
+                         class="danger-alert">
 
                     </div>
                     <v-btn dark
@@ -35,11 +39,13 @@
 
 <script>
 import AutenticationService from '@/services/AuthenticationService'
-import Panel from '@/components/Panel'
 
 export default {
   data () {
     return {
+      required (value) {
+        return !!value || 'Required.'
+      },
       email: '',
       password: '',
       error: null
@@ -54,20 +60,17 @@ export default {
         })
         this.$store.dispatch('setToken', response.data.token)
         this.$store.dispatch('setUser', response.data.user)
+        this.$router.push({
+          name: 'songs'
+        })
       } catch (err) {
         this.error = err.response.data.error || 'Something went wrong! Please reload the page.'
       }
     }
-  },
-  components: {
-    Panel
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-    .error{
-        color: red;
-    }
 </style>

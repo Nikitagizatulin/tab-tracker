@@ -1,11 +1,18 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
+// if const - lazyload page if import - import now
+// const Register = () => import('@/components/Register')
 import Register from '@/components/Register'
+// const Login = () => import('@/components/Login')
 import Login from '@/components/Login'
-import Songs from '@/components/Songs'
+// const Songs = () => import('@/components/Songs/Index')
+import Songs from '@/components/Songs/Index'
+// const CreateSong = () => import('@/components/CreateSong')
 import CreateSong from '@/components/CreateSong'
-import ViewSong from '@/components/ViewSong'
+// const ViewSong = () => import('@/components/ViewSong/Index')
+import ViewSong from '@/components/ViewSong/Index'
+// const EditSong = () => import('@/components/EditSong')
+import EditSong from '@/components/EditSong'
 
 Vue.use(Router)
 
@@ -13,8 +20,7 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: HelloWorld
+      redirect: 'songs'
     },
     {
       path: '/register',
@@ -40,6 +46,17 @@ export default new Router({
       path: '/songs/:songId',
       name: 'song',
       component: ViewSong
+    },
+    {
+      path: '/songs/:songId/edit',
+      name: 'song-edit',
+      component: EditSong
+    },
+    //  default path
+    {
+      path: '*',
+      component: { template: `<h1>Sorry the page was not found</h1>`
+      }
     }
   ]
 })

@@ -1,14 +1,18 @@
 <template>
     <v-toolbar fixed class="cyan" dark>
-        <v-toolbar-title class="mr-4"
-                         @click="navigateTo({name:'home'})">
-            <span class="pointer">TabTracker</span>
+        <v-toolbar-title class="mr-4">
+            <router-link
+                    class="pointer"
+                    tag="span"
+                    :to="{name:'songs'}">
+                TabTracker
+            </router-link>
         </v-toolbar-title>
 
         <v-toolbar-items>
             <v-btn flat
                    dark
-                   @click="navigateTo({name: 'songs'})">
+                   :to="{name: 'songs'}">
                 Browse
             </v-btn>
         </v-toolbar-items>
@@ -19,7 +23,7 @@
             <v-btn v-if="!isUserLoggedIn"
                    flat
                    dark
-                   @click="navigateTo({name:'login'})">
+                   :to="{name:'login'}">
                 Login
             </v-btn>
         </v-toolbar-items>
@@ -28,7 +32,7 @@
             <v-btn v-if="!isUserLoggedIn"
                    flat
                    dark
-                   @click="navigateTo({name:'register'})">
+                   :to="{name:'register'}">
                 Sign Up
             </v-btn>
         </v-toolbar-items>
@@ -51,13 +55,10 @@ export default {
     ...mapGetters(['isUserLoggedIn'])
   },
   methods: {
-    navigateTo (route) {
-      this.$router.push(route)
-    },
     logOut () {
       this.$store.dispatch('setToken', null)
       this.$store.dispatch('setUser', null)
-      this.$router.push({ name: 'home' })
+      this.$router.push({ name: 'songs' })
     }
   }
 }

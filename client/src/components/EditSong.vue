@@ -53,14 +53,14 @@
                         v-model="song.tab"/>
             </panel>
             <div class="danger-alert"
-                  v-if="error">
+                 v-if="error">
                 {{error}}
             </div>
             <v-btn
                     dark
                     class="cyan"
-                    @click="create">
-                Create Song
+                    @click="save">
+                Save Song
             </v-btn>
         </v-flex>
 
@@ -74,6 +74,7 @@ export default {
       required (value) {
         return !!value || 'Required.'
       },
+      songId: this.$store.state.route.params.songId,
       song: {
         title: null,
         artist: null,
@@ -88,7 +89,7 @@ export default {
     }
   },
   methods: {
-    async create () {
+    async save () {
       this.error = null
       // check every value on song object and !!reduction to a logical type
       const areAllFieldsFilledIn = Object
@@ -98,14 +99,20 @@ export default {
         this.error = 'Please fill in all the required fields.'
         return
       }
-      try {
-        await SongService.post(this.song)
-        this.$router.push({
-          name: 'songs'
-        })
-      } catch (err) {
-        console.log(err)
-      }
+      await SongService.put(this.song)
+      this.$router.push({
+        name: 'songs',
+        params: {
+          songId: this.songId
+        }
+      })
+    }
+  },
+  async mounted () {
+    try {
+      this.song = (await SongService.show(this.songId)).data
+    } catch (err) {
+      console.log(err)
     }
   }
 }
