@@ -13,8 +13,6 @@ module.exports = {
               'genre',
               'album'
             ].map(item => ({
-              // let a = Object.create(null)
-              // a['title'] = { $like: `%${search}%` }
               [item]: { $like: `%${search}%` }
             })
             )
