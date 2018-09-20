@@ -78,10 +78,13 @@ export default {
       }
       try {
         this.songId = this.$route.params.songId
-        this.bookmark = (await BookmarkService.index({
+        const bookmark = (await BookmarkService.index({
           songId: this.songId,
           userId: this.userId
         })).data
+        if (bookmark.length) {
+          this.bookmark = bookmark[0]
+        }
       } catch (err) {
         console.log(err)
       }
