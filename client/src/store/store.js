@@ -1,9 +1,14 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import createPersistedState from 'vuex-persistedstate'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
+  // this plugin provide store in local storage witch plased in browser
+  plugins: [
+    createPersistedState()
+  ],
   strict: true,
   state: {
     token: null,
@@ -13,6 +18,9 @@ export default new Vuex.Store({
   getters: {
     isUserLoggedIn (state) {
       return state.isUserLoggedIn
+    },
+    userId (state) {
+      return state.user ? state.user.id : null
     }
   },
   mutations: {

@@ -31,6 +31,7 @@ module.exports = {
     }
   },
   async post (req, res) {
+    console.log(req.body)
     try {
       const song = await Song.create(req.body)
       res.send(song)
