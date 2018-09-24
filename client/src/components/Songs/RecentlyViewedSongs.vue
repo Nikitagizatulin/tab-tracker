@@ -19,7 +19,7 @@ export default {
   data () {
     return {
       pagination: {
-        sortBy: 'date',
+        sortBy: 'createdAt',
         descending: true
       },
       histories: [],
@@ -38,13 +38,11 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['isUserLoggedIn', 'userId'])
+    ...mapGetters(['isUserLoggedIn'])
   },
   async mounted () {
     if (this.isUserLoggedIn) {
-      this.histories = (await SongHistoryService.index({
-        userId: this.userId
-      })).data
+      this.histories = (await SongHistoryService.index()).data
     }
   }
 }

@@ -4,9 +4,9 @@
       <page-header/>
       <main>
         <v-container fluid >
-          <v-scale-transition hide-on-leave>
+          <transition name="slide" mode="out-in">
             <router-view/>
-          </v-scale-transition>
+          </transition>
         </v-container>
       </main>
     </v-app>
@@ -35,5 +35,19 @@ export default {
   }
   .danger-alert{
     color: red
+  }
+  .slide-leave-active,.slide-enter-active {
+    transition: all .5s;
+  }
+  .slide-enter
+  {
+    transform: translateX(-100%);
+     opacity: 0;
+
+  }
+  .slide-leave-to
+  {
+    transform: translateX(100%);
+     opacity: 0;
   }
 </style>

@@ -59,7 +59,7 @@ export default {
   },
   props: ['song'],
   computed: {
-    ...mapGetters(['isUserLoggedIn', 'userId']),
+    ...mapGetters(['isUserLoggedIn']),
     toEdit () {
       return {
         name: 'song-edit',
@@ -79,8 +79,7 @@ export default {
       try {
         this.songId = this.$route.params.songId
         const bookmark = (await BookmarkService.index({
-          songId: this.songId,
-          userId: this.userId
+          songId: this.songId
         })).data
         if (bookmark.length) {
           this.bookmark = bookmark[0]
@@ -94,8 +93,7 @@ export default {
     async setBookmark () {
       try {
         this.bookmark = (await BookmarkService.post({
-          songId: this.songId,
-          userId: this.userId
+          songId: this.songId
         })).data
       } catch (err) {
         console.log(err)

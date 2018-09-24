@@ -21,6 +21,9 @@ export default new Vuex.Store({
     },
     userId (state) {
       return state.user ? state.user.id : null
+    },
+    getToken (state) {
+      return state.token
     }
   },
   mutations: {
