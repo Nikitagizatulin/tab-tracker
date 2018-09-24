@@ -1,13 +1,13 @@
 module.exports = {
-  port: process.env.DB_NAME || 8081,
+  port: process.env.PORT,
   db: {
-    database: process.env.DB_NAME || 'tabtracker',
-    user: process.env.DB_USER || 'root',
-    password: process.env.DB_PASS || 'password',
+    database: process.env.DB_NAME,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASS,
     options: {
-      dialect: process.env.DIALECT || 'mysql',
-      host: process.env.HOST || 'localhost',
-      port: process.env.HOST || 3306,
+      dialect: process.env.DB_DIALECT,
+      host: process.env.DB_HOST,
+      port: process.env.DB_PORT,
       pool: {
         max: 5,
         min: 0,
@@ -17,6 +17,6 @@ module.exports = {
     }
   },
   authentication: {
-    jwtSecret: process.env.JWT_SECRET || 'secret'
+    jwtSecret: process.env.JWT_SECRET
   }
 }

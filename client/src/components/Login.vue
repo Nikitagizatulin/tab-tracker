@@ -1,7 +1,8 @@
 <template>
-    <v-layout row>
-        <v-flex xs6 offset-xs3>
-            <panel title="Login">
+    <keep-alive>
+        <v-layout row>
+            <v-flex xs6 offset-xs3>
+                <panel title="Login">
                     <form name="tab-tracker-form"
                           autocomplete="off">
                         <v-text-field
@@ -32,15 +33,17 @@
                            @click.prevent="login">
                         Login
                     </v-btn>
-            </panel>
-        </v-flex>
-    </v-layout>
+                </panel>
+            </v-flex>
+        </v-layout>
+    </keep-alive>
 </template>
 
 <script>
 import AutenticationService from '@/services/AuthenticationService'
 
 export default {
+  name: 'login',
   data () {
     return {
       required (value) {

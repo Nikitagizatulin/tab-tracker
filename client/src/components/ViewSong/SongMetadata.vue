@@ -13,6 +13,7 @@
                 </div>
 
                 <v-btn
+                        v-if="isUserLoggedIn"
                         dark
                         class="cyan"
                         :to="toEdit">

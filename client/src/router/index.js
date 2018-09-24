@@ -14,23 +14,32 @@ import ViewSong from '@/components/ViewSong/Index'
 // const EditSong = () => import('@/components/EditSong')
 import EditSong from '@/components/EditSong'
 
+import store from '@/store/store'
+
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   routes: [
     {
       path: '/',
+      name: 'home',
       redirect: 'songs'
     },
     {
       path: '/register',
       name: 'register',
-      component: Register
+      component: Register,
+      meta: {
+        authAlready: true
+      }
     },
     {
       path: '/login',
       name: 'login',
-      component: Login
+      component: Login,
+      meta: {
+        authAlready: true
+      }
     },
     {
       path: '/songs',
@@ -40,7 +49,10 @@ export default new Router({
     {
       path: '/songs/create',
       name: 'song-create',
-      component: CreateSong
+      component: CreateSong,
+      meta: {
+        requiresAuth: true
+      }
     },
     {
       path: '/songs/:songId',
@@ -50,7 +62,10 @@ export default new Router({
     {
       path: '/songs/:songId/edit',
       name: 'song-edit',
-      component: EditSong
+      component: EditSong,
+      meta: {
+        requiresAuth: true
+      }
     },
     //  default path
     {
@@ -60,3 +75,15 @@ export default new Router({
     }
   ]
 })
+
+router.beforeEach((to, from, next) => {
+  const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
+  const authAlready = to.matched.some(record => record.meta.authAlready)
+  if ((requiresAuth && !store.getters.isUserLoggedIn) || (authAlready && store.getters.isUserLoggedIn)) {
+    next('/')
+  } else {
+    next()
+  }
+})
+
+export default router

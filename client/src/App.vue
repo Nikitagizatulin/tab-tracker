@@ -3,9 +3,11 @@
     <v-app>
       <page-header/>
       <main>
-        <v-container fluid >
+        <v-container fluid>
           <transition name="slide" mode="out-in">
-            <router-view/>
+            <keep-alive include="login,register">
+              <router-view/>
+            </keep-alive>
           </transition>
         </v-container>
       </main>
@@ -42,12 +44,12 @@ export default {
   .slide-enter
   {
     transform: translateX(-100%);
-     opacity: 0;
+    opacity: 0;
 
   }
   .slide-leave-to
   {
     transform: translateX(100%);
-     opacity: 0;
+    opacity: 0;
   }
 </style>

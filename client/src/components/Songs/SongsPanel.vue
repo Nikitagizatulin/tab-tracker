@@ -1,6 +1,7 @@
 <template>
     <panel title="Songs">
         <v-btn
+                v-if="isUserLoggedIn"
                 slot="action"
                 :to="{name: 'song-create'}"
                 fab
@@ -50,11 +51,15 @@
 </template>
 <script>
 import SongService from '@/services/SongService'
+import { mapGetters } from 'vuex'
 export default {
   data () {
     return {
       songs: null
     }
+  },
+  computed: {
+    ...mapGetters(['isUserLoggedIn'])
   },
   watch: {
     '$route.query.search': {

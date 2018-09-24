@@ -1,4 +1,6 @@
 //  entry point
+require('dotenv').config()
+
 const epxress = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')

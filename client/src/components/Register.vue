@@ -39,6 +39,7 @@
 <script>
 import AutenticationService from '@/services/AuthenticationService'
 export default {
+  name: 'register',
   data () {
     return {
       required (value) {
