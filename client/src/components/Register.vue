@@ -7,7 +7,7 @@
                     <v-text-field
                             label="Email address"
                             required
-                            :rules="[required]"
+                            :rules="emailRequired"
                             v-model="email"
                             autocomplete="username"
                     ></v-text-field>
@@ -15,8 +15,16 @@
                     <v-text-field
                             label="Password"
                             required
-                            :rules="[required]"
+                            :rules="passwordRequired"
                             v-model="password"
+                            type="password"
+                            autocomplete="new-password"
+                    ></v-text-field>
+                    <v-text-field
+                            label="Password Confirm"
+                            required
+                            :rules="passwordConfirmRequired"
+                            v-model="passwordConfirm"
                             type="password"
                             autocomplete="new-password"
                     ></v-text-field>
@@ -42,11 +50,21 @@ export default {
   name: 'register',
   data () {
     return {
-      required (value) {
-        return !!value || 'Required.'
-      },
+      emailRequired: [
+        v => !!v || 'E-mail is required',
+        v => /.+@.+/.test(v) || 'E-mail must be valid'
+      ],
+      passwordRequired: [
+        v => !!v || 'Password is required',
+        v => v.length > 8 || 'Password must be more than 8 characters'
+      ],
+      passwordConfirmRequired: [
+        v => !!v || 'Password confirm is required',
+        v => (v === this.password) || 'Password not match'
+      ],
       email: '',
       password: '',
+      passwordConfirm: '',
       error: null
     }
   },
@@ -55,7 +73,8 @@ export default {
       try {
         const response = await AutenticationService.register({
           email: this.email,
-          password: this.password
+          password: this.password,
+          confirmPassword: this.passwordConfirm
         })
         this.$store.dispatch('setToken', response.data.token)
         this.$store.dispatch('setUser', response.data.user)

@@ -1,12 +1,10 @@
 //  entry point
 require('dotenv').config()
-
 const epxress = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const morgan = require('morgan')
 const { sequelize } = require('./models')
-const config = require('./config/config')
 // initialize application
 const app = epxress()
 // initialize morgan in express
@@ -20,6 +18,6 @@ require('./routes')(app)
 
 sequelize.sync({})
   .then(() => {
-    app.listen(config.port || '3001')
-    console.log(`Server started on http://localhost:${config.port}`)
+    app.listen(process.env.PORT || '3001')
+    console.log(`Server started on http://localhost:${process.env.PORT || '3001'}`)
   })

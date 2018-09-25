@@ -5,32 +5,50 @@
             <panel title="Song Metadata">
                 <v-text-field
                         required
-                        :rules="[required]"
+                        :rules="[
+                        required,
+                        maxLength255
+                        ]"
                         label="Title*"
                         v-model="song.title"/>
                 <v-text-field
                         required
-                        :rules="[required]"
+                        :rules="[
+                        required,
+                        maxLength255
+                        ]"
                         label="Artist*"
                         v-model="song.artist"/>
                 <v-text-field
                         required
-                        :rules="[required]"
+                        :rules="[
+                        required,
+                        maxLength255
+                        ]"
                         label="Genre*"
                         v-model="song.genre"/>
                 <v-text-field
                         required
-                        :rules="[required]"
+                        :rules="[
+                        required,
+                        maxLength255
+                        ]"
                         label="Album*"
                         v-model="song.album"/>
                 <v-text-field
                         required
-                        :rules="[required]"
+                        :rules="[
+                        required,
+                        maxLength255
+                        ]"
                         label="AlbumImage*"
                         v-model="song.albumImage"/>
                 <v-text-field
                         required
-                        :rules="[required]"
+                        :rules="[
+                        required,
+                        maxLength255
+                        ]"
                         label="YouTubeId*"
                         v-model="song.youTubeId"/>
             </panel>
@@ -40,12 +58,18 @@
             <panel title="Song Structure"
                    class="ml-2">
                 <v-textarea
-                        :rules="[required]"
+                        :rules="[
+                        required,
+                        maxLength1000
+                        ]"
                         label="Lyrics*"
                         v-model="song.lyrics"
                 ></v-textarea>
                 <v-textarea
-                        :rules="[required]"
+                        :rules="[
+                        required,
+                        maxLength1000
+                        ]"
                         label="Tab*"
                         v-model="song.tab"
                 ></v-textarea>
@@ -69,9 +93,9 @@ import SongService from '@/services/SongService'
 export default {
   data () {
     return {
-      required (value) {
-        return !!value || 'Required.'
-      },
+      required: value => !!value || 'Required.',
+      maxLength255: v => (v && v.length <= 255) || 'Maximum length for this filed is 255 characters',
+      maxLength1000: v => (v && v.length <= 5000) || 'Maximum length for this filed is 5000 characters',
       songId: this.$store.state.route.params.songId,
       song: {
         title: null,
@@ -88,6 +112,7 @@ export default {
   },
   methods: {
     async save () {
+      console.log(this.song)
       this.error = null
       // check every value on song object and !!reduction to a logical type
       const areAllFieldsFilledIn = Object
@@ -97,7 +122,12 @@ export default {
         this.error = 'Please fill in all the required fields.'
         return
       }
-      await SongService.put(this.song)
+      try {
+        await SongService.put(this.song)
+      } catch (err) {
+        this.error = err.response.data.error
+        return
+      }
       this.$router.push({
         name: 'songs',
         params: {
@@ -110,7 +140,7 @@ export default {
     try {
       this.song = (await SongService.show(this.songId)).data
     } catch (err) {
-      console.log(err)
+      this.error = err.response.data.error || 'Something went wrong! Please reload the page.'
     }
   }
 }

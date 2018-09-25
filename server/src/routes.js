@@ -1,5 +1,6 @@
 const AuthenticationController = require('./controller/AuthenticateController')
 const AuthenticationControllerPolicy = require('./policies/AuthenticationControllerPolicy')
+const SongControllerPolicy = require('./policies/SongControllerPolicy')
 const SongsController = require('./controller/SongsController')
 const BookmarksController = require('./controller/BookmarksController')
 const HistoriesController = require('./controller/HistoriesController')
@@ -10,6 +11,7 @@ module.exports = (app) => {
     AuthenticationControllerPolicy.register,
     AuthenticationController.register)
   app.post('/login',
+    AuthenticationControllerPolicy.login,
     AuthenticationController.login)
 
   app.get('/songs',
@@ -18,9 +20,11 @@ module.exports = (app) => {
     SongsController.show)
   app.put('/songs/:songId',
     isAuthenticated,
+    SongControllerPolicy.createOrEdit,
     SongsController.put)
   app.post('/songs',
     isAuthenticated,
+    SongControllerPolicy.createOrEdit,
     SongsController.post)
 
   app.get('/bookmarks',

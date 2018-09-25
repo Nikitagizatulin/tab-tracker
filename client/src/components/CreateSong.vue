@@ -5,32 +5,50 @@
             <panel title="Song Metadata">
                 <v-text-field
                         required
-                        :rules="[required]"
+                        :rules="[
+                        required,
+                        maxLength255
+                        ]"
                         label="Title*"
                         v-model="song.title"/>
                 <v-text-field
                         required
-                        :rules="[required]"
+                        :rules="[
+                        required,
+                        maxLength255
+                        ]"
                         label="Artist*"
                         v-model="song.artist"/>
                 <v-text-field
                         required
-                        :rules="[required]"
+                        :rules="[
+                        required,
+                        maxLength255
+                        ]"
                         label="Genre*"
                         v-model="song.genre"/>
                 <v-text-field
                         required
-                        :rules="[required]"
+                        :rules="[
+                        required,
+                        maxLength255
+                        ]"
                         label="Album*"
                         v-model="song.album"/>
                 <v-text-field
                         required
-                        :rules="[required]"
+                        :rules="[
+                        required,
+                        maxLength255
+                        ]"
                         label="AlbumImage*"
                         v-model="song.albumImage"/>
                 <v-text-field
                         required
-                        :rules="[required]"
+                        :rules="[
+                        required,
+                        maxLength255
+                        ]"
                         label="YouTubeId*"
                         v-model="song.youTubeId"/>
             </panel>
@@ -39,18 +57,22 @@
         <v-flex xs8>
             <panel title="Song Structure"
                    class="ml-2">
-                <v-text-field
-                        required
-                        :rules="[required]"
+                <v-textarea
+                        :rules="[
+                        required,
+                        maxLength1000
+                        ]"
                         label="Lyrics*"
-                        multi-line
-                        v-model="song.lyrics"/>
-                <v-text-field
-                        required
-                        :rules="[required]"
+                        v-model="song.lyrics"
+                ></v-textarea>
+                <v-textarea
+                        :rules="[
+                        required,
+                        maxLength1000
+                        ]"
                         label="Tab*"
-                        multi-line
-                        v-model="song.tab"/>
+                        v-model="song.tab"
+                ></v-textarea>
             </panel>
             <div class="danger-alert"
                   v-if="error">
@@ -71,9 +93,9 @@ import SongService from '@/services/SongService'
 export default {
   data () {
     return {
-      required (value) {
-        return !!value || 'Required.'
-      },
+      required: value => !!value || 'Required.',
+      maxLength255: v => (v && v.length <= 255) || 'Maximum length for this filed is 255 characters',
+      maxLength1000: v => (v && v.length <= 5000) || 'Maximum length for this filed is 5000 characters',
       song: {
         title: null,
         artist: null,
@@ -105,6 +127,7 @@ export default {
         })
       } catch (err) {
         console.log(err)
+        this.error = 'Something went wrong, please reload the page and try again!'
       }
     }
   }

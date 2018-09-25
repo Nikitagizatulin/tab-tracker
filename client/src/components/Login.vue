@@ -9,7 +9,7 @@
                                 label="Email address"
                                 v-model="email"
                                 required
-                                :rules="[required]"
+                                :rules="emailRequired"
                                 autocomplete="username"
                         ></v-text-field>
                         <br>
@@ -17,7 +17,7 @@
                                 label="Password"
                                 v-model="password"
                                 required
-                                :rules="[required]"
+                                :rules="passwordRequired"
                                 type="password"
                                 autocomplete="new-password"
                         ></v-text-field>
@@ -25,7 +25,6 @@
                     <br>
                     <div v-html="error"
                          class="danger-alert">
-
                     </div>
                     <v-btn dark
                            class="cyan"
@@ -46,9 +45,14 @@ export default {
   name: 'login',
   data () {
     return {
-      required (value) {
-        return !!value || 'Required.'
-      },
+      emailRequired: [
+        v => !!v || 'E-mail is required',
+        v => /.+@.+/.test(v) || 'E-mail must be valid'
+      ],
+      passwordRequired: [
+        v => !!v || 'Password is required',
+        v => v.length > 8 || 'Password must be more than 8 characters'
+      ],
       email: '',
       password: '',
       error: null
