@@ -21,19 +21,12 @@
                 </v-btn>
 
                 <v-btn
-                        v-if="isUserLoggedIn && !bookmark"
-                        dark
+                        v-if="isUserLoggedIn"
+                        :dark="!disabled"
+                        :disabled="disabled"
                         class="teal"
-                        @click="setBookmark">
-                    Set As Bookmark
-                </v-btn>
-
-                <v-btn
-                        v-if="isUserLoggedIn && bookmark"
-                        dark
-                        class="teal"
-                        @click="unsetBookmark">
-                    Unset As Bookmark
+                        @click="actionBookmark">
+                    {{ bookmark ? 'Unset As Bookmark' : 'Set As Bookmark' }}
                 </v-btn>
 
             </v-flex>
@@ -50,12 +43,14 @@
 <script>
 import { mapGetters } from 'vuex'
 import BookmarkService from '@/services/BookmarkService'
+import _ from 'lodash'
 
 export default {
   data () {
     return {
       bookmark: null,
-      songId: null
+      songId: null,
+      disabled: false
     }
   },
   props: ['song'],
@@ -91,11 +86,18 @@ export default {
     }
   },
   methods: {
+    actionBookmark: _.throttle(function () {
+      this.disabled = true
+      this.bookmark ? this.unsetBookmark() : this.setBookmark()
+    }, 500),
     async setBookmark () {
       try {
         this.bookmark = (await BookmarkService.post({
           songId: this.songId
         })).data
+        setTimeout(() => {
+          this.disabled = false
+        }, 500)
       } catch (err) {
         console.log(err)
       }
@@ -104,9 +106,13 @@ export default {
       try {
         await BookmarkService.delete(this.bookmark.id)
         this.bookmark = null
+        setTimeout(() => {
+          this.disabled = false
+        }, 500)
       } catch (err) {
         console.log(err)
       }
+      // this.disabled = false
     }
   }
 }
