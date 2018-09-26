@@ -79,7 +79,7 @@
             </div>
             <v-btn
                     dark
-                    class="cyan"
+                    class="teal"
                     @click="create">
                 Create Song
             </v-btn>

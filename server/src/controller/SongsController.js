@@ -31,7 +31,7 @@ module.exports = {
     }
   },
   async post (req, res) {
-    console.log(req.body)
+    req.body.UserId = req.user.id
     try {
       const song = await Song.create(req.body)
       res.send(song)
@@ -53,6 +53,11 @@ module.exports = {
     }
   },
   async put (req, res) {
+    if (req.user.id !== req.body.UserId) {
+      return res.status(403).send({
+        error: 'You don\'t have access to update this song'
+      })
+    }
     try {
       await Song.update(req.body, {
         where: {

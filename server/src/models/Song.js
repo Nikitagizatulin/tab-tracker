@@ -9,5 +9,8 @@ module.exports = (sequelize, DataTypes) => {
     lyrics: DataTypes.TEXT,
     tab: DataTypes.TEXT
   })
+  Song.associate = function (models) {
+    Song.belongsTo(models.User)
+  }
   return Song
 }

@@ -5,7 +5,7 @@
                 slot="action"
                 :to="{name: 'song-create'}"
                 fab
-                class="cyan accens-2"
+                class="teal accens-2"
                 light
                 medium
                 absolute
@@ -30,7 +30,7 @@
                     </div>
                     <v-btn
                             dark
-                            class="cyan"
+                            class="teal"
                             :to="{  name:'song',
                                     params: {
                                         songId: song.id

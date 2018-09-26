@@ -13,9 +13,9 @@
                 </div>
 
                 <v-btn
-                        v-if="isUserLoggedIn"
+                        v-if="isUserLoggedIn && userId===song.UserId"
                         dark
-                        class="cyan"
+                        class="teal"
                         :to="toEdit">
                     Edit
                 </v-btn>
@@ -23,7 +23,7 @@
                 <v-btn
                         v-if="isUserLoggedIn && !bookmark"
                         dark
-                        class="cyan"
+                        class="teal"
                         @click="setBookmark">
                     Set As Bookmark
                 </v-btn>
@@ -31,7 +31,7 @@
                 <v-btn
                         v-if="isUserLoggedIn && bookmark"
                         dark
-                        class="cyan"
+                        class="teal"
                         @click="unsetBookmark">
                     Unset As Bookmark
                 </v-btn>
@@ -60,7 +60,7 @@ export default {
   },
   props: ['song'],
   computed: {
-    ...mapGetters(['isUserLoggedIn']),
+    ...mapGetters(['isUserLoggedIn', 'userId']),
     toEdit () {
       return {
         name: 'song-edit',

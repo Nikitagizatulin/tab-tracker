@@ -70,7 +70,7 @@ const router = new Router({
     //  default path
     {
       path: '*',
-      component: { template: `<h1>Sorry the page was not found</h1>`
+      component: { template: `<h1 v-once>Sorry the page was not found</h1>`
       }
     }
   ]

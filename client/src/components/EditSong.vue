@@ -79,7 +79,7 @@
             </div>
             <v-btn
                     dark
-                    class="cyan"
+                    class="teal"
                     @click="save">
                 Save Song
             </v-btn>
@@ -138,6 +138,10 @@ export default {
   async mounted () {
     try {
       this.song = (await SongService.show(this.songId)).data
+      // if not this user created this song, he must be redirect to back or home page
+      if (this.song.UserId !== this.$store.getters.userId) {
+        window.history.length > 1 ? this.$router.go(-1) : this.$router.push('/')
+      }
     } catch (err) {
       this.error = err.response.data.error || 'Something went wrong! Please reload the page.'
     }

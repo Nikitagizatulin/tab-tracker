@@ -6,6 +6,7 @@
                 :pagination.sync="pagination">
             <template slot="items"
                       slot-scope="props">
+                <td>{{ dateToJs(props.item.createdAt) }}</td>
                 <td>{{ props.item.title }}</td>
                 <td>{{ props.item.artist }}</td>
             </template>
@@ -25,6 +26,11 @@ export default {
       headers: [
         {
           align: 'center',
+          text: 'Time',
+          value: 'createdAt'
+        },
+        {
+          align: 'center',
           text: 'Title',
           value: 'title'
         },
@@ -34,6 +40,11 @@ export default {
           value: 'artist'
         }
       ]
+    }
+  },
+  methods: {
+    dateToJs (sqlDate) {
+      return new Date(sqlDate).toString().slice(0, 24)
     }
   },
   computed: {

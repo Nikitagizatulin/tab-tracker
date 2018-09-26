@@ -2,8 +2,16 @@ const Joi = require('joi')
 
 module.exports = {
   createOrEdit (req, res, next) {
+    let userId = req.user.id
     const shema = {
       id: Joi.number().integer().allow(''),
+      UserId: Joi.number().optional().valid(userId).options({
+        language: {
+          any: {
+            allowOnly: '!! You don\'t have to access do this!'
+          }
+        }
+      }),
       title: Joi.string().required().min(3).max(255),
       artist: Joi.string().required().min(3).max(255),
       genre: Joi.string().required().min(3).max(255),

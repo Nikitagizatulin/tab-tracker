@@ -33,7 +33,7 @@
                      class="danger-alert">
                 </div>
                 <v-btn dark
-                       class="cyan"
+                       class="teal"
                        type="button"
                        @click.prevent="register">
                     Register
