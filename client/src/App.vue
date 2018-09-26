@@ -3,7 +3,7 @@
     <v-app>
       <page-header/>
       <main>
-        <v-container fluid>
+        <v-container fluid grid-list-md>
           <transition name="slide" mode="out-in">
             <keep-alive include="login,register">
               <router-view/>

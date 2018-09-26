@@ -17,6 +17,9 @@ module.exports = {
           {
             model: Song
           }
+        ],
+        order: [
+          ['id', 'DESC']
         ]
       })
         .map(bookmark => bookmark.toJSON())

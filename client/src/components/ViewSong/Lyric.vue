@@ -1,6 +1,5 @@
 <template>
-    <panel title="Lyrics"
-           class="ml-2">
+    <panel title="Lyrics">
                 <v-textarea readonly
                           v-model="song.lyrics"></v-textarea>
     </panel>

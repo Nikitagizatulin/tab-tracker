@@ -19,8 +19,7 @@ export default {
   data () {
     return {
       pagination: {
-        sortBy: 'date',
-        descending: true
+        sortBy: null
       },
       bookmarks: [],
       headers: [

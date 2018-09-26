@@ -1,6 +1,6 @@
 <template>
     <v-layout row>
-        <v-flex xs6 offset-xs3>
+        <v-flex xs10 md6 offset-xs1 offset-md3>
             <panel title="Register">
                 <form name="tab-tracker-form"
                       autocomplete="off">
@@ -11,7 +11,6 @@
                             v-model="email"
                             autocomplete="username"
                     ></v-text-field>
-                    <br>
                     <v-text-field
                             label="Password"
                             required

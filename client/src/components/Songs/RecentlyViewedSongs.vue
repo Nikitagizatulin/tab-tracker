@@ -19,8 +19,7 @@ export default {
   data () {
     return {
       pagination: {
-        sortBy: 'createdAt',
-        descending: true
+        sortBy: null
       },
       histories: [],
       headers: [

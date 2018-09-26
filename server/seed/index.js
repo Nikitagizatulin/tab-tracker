@@ -1,3 +1,4 @@
+require('dotenv').config()
 const {
   sequelize,
   Song,
@@ -5,7 +6,6 @@ const {
   Bookmark,
   History
 } = require('../src/models')
-
 const Promise = require('bluebird')
 const songs = require('./songs')
 const users = require('./users')

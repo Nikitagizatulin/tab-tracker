@@ -1,7 +1,7 @@
 <template>
-    <v-layout>
+    <v-layout row wrap>
 
-        <v-flex xs4>
+        <v-flex xs12 md4>
             <panel title="Song Metadata">
                 <v-text-field
                         required
@@ -54,9 +54,8 @@
             </panel>
         </v-flex>
 
-        <v-flex xs8>
-            <panel title="Song Structure"
-                   class="ml-2">
+        <v-flex xs12 md8>
+            <panel title="Song Structure">
                 <v-textarea
                         :rules="[
                         required,

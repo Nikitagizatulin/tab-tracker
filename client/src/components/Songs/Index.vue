@@ -1,10 +1,10 @@
 <template>
-    <v-layout row>
-        <v-flex xs6 v-if="isUserLoggedIn">
+    <v-layout row wrap>
+        <v-flex xs12 md6 v-if="isUserLoggedIn">
             <songs-bookmarks />
             <recently-viewed-songs class="mt-2" />
         </v-flex>
-        <v-flex :class="rightPanel" class="ml-2">
+        <v-flex xs12 :class="rightPanel">
             <songs-search-panel />
             <songs-panel class="mt-2"/>
         </v-flex>
@@ -21,7 +21,7 @@ export default {
   computed: {
     ...mapGetters(['isUserLoggedIn']),
     rightPanel () {
-      return this.isUserLoggedIn ? 'xs6' : 'xs12'
+      return this.isUserLoggedIn ? 'md6' : 'md12'
     }
   },
   components: {

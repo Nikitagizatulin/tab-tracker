@@ -10,6 +10,9 @@ module.exports = {
           {
             model: Song
           }
+        ],
+        order: [
+          ['id', 'DESC']
         ]
       })
         .map(history => history.toJSON())

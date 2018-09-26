@@ -13,6 +13,9 @@ mv .env.example .env
 
 # create seed in database
 npm run seed
+#after seeds create a cuple test songs and test user 
+email: test@gmail.com
+password: 123456789
 
 # now we can start the server
 npm run start

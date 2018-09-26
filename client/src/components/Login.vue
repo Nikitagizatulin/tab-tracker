@@ -1,7 +1,6 @@
 <template>
-    <keep-alive>
         <v-layout row>
-            <v-flex xs6 offset-xs3>
+            <v-flex xs10 md6 offset-xs1 offset-md3>
                 <panel title="Login">
                     <form name="tab-tracker-form"
                           autocomplete="off">
@@ -12,7 +11,6 @@
                                 :rules="emailRequired"
                                 autocomplete="username"
                         ></v-text-field>
-                        <br>
                         <v-text-field
                                 label="Password"
                                 v-model="password"
@@ -35,7 +33,6 @@
                 </panel>
             </v-flex>
         </v-layout>
-    </keep-alive>
 </template>
 
 <script>
