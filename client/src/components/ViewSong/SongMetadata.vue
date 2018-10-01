@@ -92,10 +92,11 @@ export default {
     }, 500),
     async setBookmark () {
       try {
-        this.bookmark = (await BookmarkService.post({
+        let result = (await BookmarkService.post({
           songId: this.songId
         })).data
         setTimeout(() => {
+          this.bookmark = result
           this.disabled = false
         }, 500)
       } catch (err) {
@@ -105,8 +106,8 @@ export default {
     async unsetBookmark () {
       try {
         await BookmarkService.delete(this.bookmark.id)
-        this.bookmark = null
         setTimeout(() => {
+          this.bookmark = null
           this.disabled = false
         }, 500)
       } catch (err) {

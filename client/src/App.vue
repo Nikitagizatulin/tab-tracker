@@ -18,6 +18,7 @@
 
 <script>
 import PageHeader from '@/components/Header'
+
 export default {
   name: 'App',
   components: {
