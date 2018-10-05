@@ -2,6 +2,7 @@ const { Song } = require('../models')
 
 module.exports = {
   async index (req, res) {
+    console.log(req.url, 'asdasdasd')
     try {
       let song = null
       const search = req.query.search
@@ -36,7 +37,6 @@ module.exports = {
       const song = await Song.create(req.body)
       res.send(song)
     } catch (e) {
-      console.log('here the error', e)
       res.status(500).send({
         error: 'An error has occured trying to create the song.'
       })

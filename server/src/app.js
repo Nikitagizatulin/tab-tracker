@@ -7,9 +7,11 @@ const morgan = require('morgan')
 const { sequelize } = require('./models')
 // initialize application
 const app = epxress()
+
 // initialize morgan in express
 app.use(morgan('combined'))
 app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ 'extended': 'false' }))
 app.use(cors())
 
 require('./passport')

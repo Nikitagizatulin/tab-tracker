@@ -9,6 +9,7 @@
                 light
                 medium
                 absolute
+                dark
                 right
                 middle  >
             <v-icon>add</v-icon>

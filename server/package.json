@@ -24,7 +24,8 @@
     "mysql2": "^1.6.1",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
-    "sequelize": "^4.38.0"
+    "sequelize": "^4.38.0",
+    "socketio": "^1.0.0"
   },
   "devDependencies": {
     "eslint": "^5.5.0",

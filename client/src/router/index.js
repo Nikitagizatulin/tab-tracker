@@ -3,16 +3,16 @@ import Router from 'vue-router'
 // if const - lazyload page if import - import now
 // const Register = () => import('@/components/Register')
 import Register from '@/components/Register'
-// const Login = () => import('@/components/Login')
 import Login from '@/components/Login'
-// const Songs = () => import('@/components/Songs/Index')
 import Songs from '@/components/Songs/Index'
-// const CreateSong = () => import('@/components/CreateSong')
 import CreateSong from '@/components/CreateSong'
-// const ViewSong = () => import('@/components/ViewSong/Index')
 import ViewSong from '@/components/ViewSong/Index'
-// const EditSong = () => import('@/components/EditSong')
 import EditSong from '@/components/EditSong'
+import Error from '@/components/Error'
+import RoomList from '@/components/Chat/RoomList'
+import AddRoom from '@/components/Chat/AddRoom'
+import JoinRoom from '@/components/Chat/JoinRoom'
+import ChatRoom from '@/components/Chat/ChatRoom'
 
 import store from '@/store/store'
 
@@ -67,11 +67,30 @@ const router = new Router({
         requiresAuth: true
       }
     },
+    {
+      path: '/rooms',
+      name: 'rooms',
+      component: RoomList
+    },
+    {
+      path: '/room/create',
+      name: 'room-create',
+      component: AddRoom
+    },
+    {
+      path: '/join-room/:id',
+      name: 'join-room',
+      component: JoinRoom
+    },
+    {
+      path: '/chat-room/:id/:nickname',
+      name: 'chat-room',
+      component: ChatRoom
+    },
     //  default path
     {
       path: '*',
-      component: { template: `<h1 v-once>Sorry the page was not found</h1>`
-      }
+      component: Error
     }
   ]
 })

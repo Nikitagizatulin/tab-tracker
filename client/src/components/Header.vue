@@ -13,7 +13,15 @@
             <v-btn flat
                    dark
                    :to="{name: 'songs'}">
-                Browse
+                Songs
+            </v-btn>
+        </v-toolbar-items>
+
+        <v-toolbar-items>
+            <v-btn flat
+                   dark
+                   :to="{name: 'rooms'}">
+                Rooms
             </v-btn>
         </v-toolbar-items>
 
