@@ -18,7 +18,8 @@
         </v-toolbar-items>
 
         <v-toolbar-items>
-            <v-btn flat
+            <v-btn v-if="isUserLoggedIn"
+                    flat
                    dark
                    :to="{name: 'rooms'}">
                 Rooms

@@ -11,7 +11,6 @@ import EditSong from '@/components/EditSong'
 import Error from '@/components/Error'
 import RoomList from '@/components/Chat/RoomList'
 import AddRoom from '@/components/Chat/AddRoom'
-import JoinRoom from '@/components/Chat/JoinRoom'
 import ChatRoom from '@/components/Chat/ChatRoom'
 
 import store from '@/store/store'
@@ -70,22 +69,26 @@ const router = new Router({
     {
       path: '/rooms',
       name: 'rooms',
-      component: RoomList
+      component: RoomList,
+      meta: {
+        requiresAuth: true
+      }
     },
     {
       path: '/room/create',
       name: 'room-create',
-      component: AddRoom
+      component: AddRoom,
+      meta: {
+        requiresAuth: true
+      }
     },
     {
-      path: '/join-room/:id',
-      name: 'join-room',
-      component: JoinRoom
-    },
-    {
-      path: '/chat-room/:id/:nickname',
+      path: '/chat-room/:id',
       name: 'chat-room',
-      component: ChatRoom
+      component: ChatRoom,
+      meta: {
+        requiresAuth: true
+      }
     },
     //  default path
     {

@@ -7,13 +7,7 @@ export default {
   addRoom (params) {
     return Api().post('room', params)
   },
-  showRoom (id) {
-    return Api().get(`room/${id}`)
-  },
-  createChat (params) {
-    return Api().post('chat', params)
-  },
-  getChat (id) {
+  getMessages (id) {
     return Api().get(`chat/${id}`)
   }
 }

@@ -24,6 +24,9 @@ export default new Vuex.Store({
     },
     getToken (state) {
       return state.token
+    },
+    getUserEmail (state) {
+      return state.user ? state.user.email : null
     }
   },
   mutations: {

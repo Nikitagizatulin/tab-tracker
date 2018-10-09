@@ -43,11 +43,12 @@
 
 <script>
 import ChatService from '@/services/ChatService'
-
+import { mapGetters } from 'vuex'
 export default {
   name: 'rooms',
   data () {
     return {
+      chat: {},
       pagination: {
         sortBy: null
       },
@@ -67,12 +68,17 @@ export default {
     dateToJs (sqlDate) {
       return new Date(sqlDate).toString().slice(0, 24)
     },
-    joinRoom (id) {
+    async joinRoom (id) {
       this.$router.push({
-        name: 'join-room',
+        name: 'chat-room',
         params: { id: id }
       })
     }
+  },
+  computed: {
+    ...mapGetters([
+      'getUserEmail'
+    ])
   }
 }
 </script>
