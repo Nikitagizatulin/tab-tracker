@@ -32,27 +32,28 @@ sequelize.sync({})
           .then(room => {
             socket.join(room.room_name)
 
-            io.in(room.room_name).emit('new-message', {
+            socket.broadcast.in(room.room_name).emit('new-message', {
               message: {
                 message: `User ${socket.handshake.query.nickname} connected`,
                 nickname: 'System'
               }
             })
             socket.on('disconnect', () => {
-              io.in(room.room_name).emit('new-message', {
+              socket.broadcast.in(room.room_name).emit('new-message', {
                 message: {
                   message: `User ${socket.handshake.query.nickname} disconnected`,
                   nickname: 'System'
                 }
               })
             })
-            socket.on('save-message', data => {
-              Chat.create({
-                nickname: data.nickname,
-                message: data.message,
-                createdAt: data.created_date,
-                RoomId: data.room
+            socket.on('typing', user => {
+              socket.broadcast.in(room.room_name).emit('typing', {
+                name: user,
+                message: `${user} is typing...`
               })
+            })
+            socket.on('save-message', data => {
+              Chat.create(data)
                 .then(message => {
                   console.log(message)
                   io.in(room.room_name).emit('new-message', { message: data })

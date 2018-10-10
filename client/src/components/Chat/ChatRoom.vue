@@ -2,29 +2,52 @@
     <v-layout row wrap>
         <v-flex xs8 md6 offset-xs2 offset-md3>
             <panel title="Chat Room">
-                <v-list two-line v-chat-scroll>
+                <v-list two-line
+                        v-chat-scroll
+                        class="chat-body">
                     <template v-for="(item,index) in chats">
                         <v-list-tile
                                 :key="index"
-                                avatar
-                        >
-                            <v-list-tile-avatar>
-                                <img src="../../assets/logo.png">
-                            </v-list-tile-avatar>
+                                avatar>
+                            <v-layout
+                                    row
+                                    :reverse="item.nickname === getUserEmail">
+                                <v-list-tile-avatar>
+                                    <img src="../../assets/logo.png">
+                                </v-list-tile-avatar>
 
-                            <v-list-tile-content>
-                                <v-list-tile-title v-html="item.nickname"></v-list-tile-title>
-                                <v-list-tile-sub-title v-html="item.message"></v-list-tile-sub-title>
-                            </v-list-tile-content>
+                                <v-list-tile-content>
+                                    <v-list-tile-title
+                                            :class="item.nickname === getUserEmail ? 'text-xs-right' : ''">
+                                        <v-layout
+                                                row
+                                                :reverse="item.nickname === getUserEmail">
+                                            <span class="subheading">{{item.nickname}}</span>
+                                            <span class="caption grey--text">{{ dateToJs(item.createdAt) }}</span>
+                                        </v-layout>
+                                    </v-list-tile-title>
+                                    <v-list-tile-sub-title
+                                            v-html="item.message"
+                                            :class="item.nickname === getUserEmail ? 'text-xs-right' : ''" />
+                                </v-list-tile-content>
+                            </v-layout>
                         </v-list-tile>
+                        <v-divider inset :key="index + item.nickname" />
                     </template>
                 </v-list>
                 <v-text-field
+                        is="v-textarea"
+                        :hint="typingMessage"
+                        persistent-hint
+                        multi-line
+                        no-resize
+                        height="100"
                         v-model.trim="message"
                         :append-outer-icon="message ? 'send' : ''"
                         box
                         autofocus
                         color="teal"
+                        maxlength="255"
                         counter="255"
                         clear-icon="clear"
                         clearable
@@ -32,8 +55,7 @@
                         type="text"
                         @keyup.enter.prevent="onSubmit"
                         @click:append-outer="onSubmit"
-                        @click:clear="clearMessage"
-                ></v-text-field>
+                        @click:clear="clearMessage" />
             </panel>
             <div class="danger-alert"
                  v-if="error">
@@ -58,14 +80,15 @@ export default {
     return {
       chats: [],
       error: null,
-      nickname: this.getUserEmail,
       message: '',
       socket: io('http://localhost:8081', {
         query: {
           nickname: this.$store.getters.getUserEmail,
           room: this.$route.params.id
         }
-      })
+      }),
+      typing: {},
+      timeout: [] // array of
     }
   },
   async mounted () {
@@ -78,33 +101,61 @@ export default {
     })
     try {
       this.chats = (await ChatService.getMessages(this.$route.params.id)).data
-      this.socket.on('new-message', function (data) {
+      this.socket.on('new-message', data => {
         this.chats.push(data.message)
-      }.bind(this))
+      })
+      this.socket.on('typing', data => {
+        this.$set(this.typing, data.name, data.message)
+        if (this.timeout[data.name]) {
+          clearTimeout(this.timeout[data.name])
+        }
+        this.timeout[data.name] = setTimeout(() => {
+          this.$delete(this.typing, data.name)
+        }, 2000)
+      })
     } catch (err) {
       this.error = err.response.data.error || 'Something went wrong! Please reload the page.'
     }
   },
   methods: {
+    dateToJs (sqlDate) {
+      return sqlDate ? new Date(sqlDate).toString().slice(0, 24) : ''
+    },
     clearMessage () {
       this.message = ''
     },
     async onSubmit () {
       // send the message
       this.socket.emit('save-message', {
-        room: this.$route.params.id,
+        RoomId: this.$route.params.id,
         nickname: this.getUserEmail,
         message: this.message,
-        created_date: new Date()
+        createdAt: new Date()
       })
       this.message = ''
     }
   },
   computed: {
-    ...mapGetters(['getUserEmail'])
+    ...mapGetters(['getUserEmail']),
+    typingMessage () {
+      return Object.values(this.typing).join(' , ')
+    }
+  },
+  watch: {
+    message () {
+      this.socket.emit('typing', this.getUserEmail)
+    }
   }
 }
 </script>
 
-<style>
+<style scoped>
+    .chat-body{
+        overflow-y: scroll;
+        max-height: 500px;
+    }
+    span{
+        margin: 0 10px 0 10px;
+        display:block;
+    }
 </style>
