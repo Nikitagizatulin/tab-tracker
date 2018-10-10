@@ -1,38 +1,38 @@
 <template>
-        <v-layout row>
-            <v-flex xs10 md6 offset-xs1 offset-md3>
-                <panel title="Login">
-                    <form name="tab-tracker-form"
-                          autocomplete="off">
-                        <v-text-field
-                                label="Email address"
-                                v-model="email"
-                                required
-                                :rules="emailRequired"
-                                autocomplete="username"
-                        ></v-text-field>
-                        <v-text-field
-                                label="Password"
-                                v-model="password"
-                                required
-                                :rules="passwordRequired"
-                                type="password"
-                                autocomplete="new-password"
-                        ></v-text-field>
-                    </form>
-                    <br>
-                    <div v-html="error"
-                         class="danger-alert">
-                    </div>
-                    <v-btn dark
-                           class="teal"
-                           type="button"
-                           @click.prevent="login">
-                        Login
-                    </v-btn>
-                </panel>
-            </v-flex>
-        </v-layout>
+    <v-layout row>
+        <v-flex xs10 md6 offset-xs1 offset-md3>
+            <panel title="Login">
+                <form name="tab-tracker-form"
+                      autocomplete="off">
+                    <v-text-field
+                            label="Email address"
+                            v-model="email"
+                            required
+                            :rules="emailRequired"
+                            autocomplete="username"
+                    ></v-text-field>
+                    <v-text-field
+                            label="Password"
+                            v-model="password"
+                            required
+                            :rules="passwordRequired"
+                            type="password"
+                            autocomplete="new-password"
+                    ></v-text-field>
+                </form>
+                <br>
+                <div v-html="error"
+                     class="danger-alert">
+                </div>
+                <v-btn dark
+                       class="teal"
+                       type="button"
+                       @click.prevent="login">
+                    Login
+                </v-btn>
+            </panel>
+        </v-flex>
+    </v-layout>
 </template>
 
 <script>

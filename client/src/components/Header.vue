@@ -26,6 +26,15 @@
             </v-btn>
         </v-toolbar-items>
 
+        <v-toolbar-items>
+            <v-btn v-if="isUserLoggedIn"
+                   flat
+                   dark
+                   :to="{name: 'profile'}">
+                Profile
+            </v-btn>
+        </v-toolbar-items>
+
         <v-spacer></v-spacer>
 
         <v-toolbar-items>
@@ -51,7 +60,7 @@
                    flat
                    dark
                    @click="logOut">
-                Log Out
+                Log Out <v-icon>arrow_right_alt</v-icon>
             </v-btn>
         </v-toolbar-items>
 

@@ -12,6 +12,7 @@ import Error from '@/components/Error'
 import RoomList from '@/components/Chat/RoomList'
 import AddRoom from '@/components/Chat/AddRoom'
 import ChatRoom from '@/components/Chat/ChatRoom'
+import Profile from '@/components/Profile'
 
 import store from '@/store/store'
 
@@ -86,6 +87,14 @@ const router = new Router({
       path: '/chat-room/:id',
       name: 'chat-room',
       component: ChatRoom,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/profile',
+      name: 'profile',
+      component: Profile,
       meta: {
         requiresAuth: true
       }
