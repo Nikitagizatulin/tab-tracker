@@ -6,6 +6,7 @@ const BookmarksController = require('./controller/BookmarksController')
 const HistoriesController = require('./controller/HistoriesController')
 const RoomController = require('./controller/RoomController')
 const ChatController = require('./controller/ChatController')
+const ProfileController = require('./controller/ProfileController')
 const isAuthenticated = require('./policies/IsAuthenticated')
 
 module.exports = (app) => {
@@ -46,13 +47,32 @@ module.exports = (app) => {
     isAuthenticated,
     HistoriesController.post)
 
-  app.get('/room', RoomController.index)
-  app.get('/room/:roomId', RoomController.show)
-  app.post('/room', RoomController.post)
+  app.get('/room',
+    isAuthenticated,
+    RoomController.index)
+  app.get('/room/:roomId',
+    isAuthenticated,
+    RoomController.show)
+  app.post('/room',
+    isAuthenticated,
+    RoomController.post)
 
-  app.get('/chat', ChatController.index)
-  app.get('/chat/:chatId', ChatController.show)
-  app.post('/chat', ChatController.post)
+  app.get('/chat',
+    isAuthenticated,
+    ChatController.index)
+  app.get('/chat/:chatId',
+    isAuthenticated,
+    ChatController.show)
+  app.post('/chat',
+    isAuthenticated,
+    ChatController.post)
+
+  app.get('/profile/:id',
+    isAuthenticated,
+    ProfileController.show)
+  app.post('/chat',
+    isAuthenticated,
+    ProfileController.post)
 
   require('./error')(app)
 }
