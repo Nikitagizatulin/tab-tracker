@@ -7,7 +7,11 @@
                         color="black">
                     <img src="https://picsum.photos/510/300?random" alt="avatar">
                 </v-avatar>
-                <p><span class="grey--text">Email:</span> {{getUserEmail}}</p>
+                <p class="title mt-4" v-if="getUserInfo.email"><span class="grey--text">Email:</span> {{getUserInfo.email}}</p>
+                <p class="title mt-4" v-if="getUserInfo.nickname"><span class="grey--text">Nickname:</span> {{getUserInfo.nickname}}</p>
+                <p class="title mt-4" v-if="getUserInfo.firstName"><span class="grey--text">First Name:</span> {{getUserInfo.firstName}}</p>
+                <p class="title mt-4" v-if="getUserInfo.lastName"><span class="grey--text">Last Name:</span> {{getUserInfo.lastName}}</p>
+                <p class="title mt-4" v-if="getUserInfo.birthdate"><span class="grey--text">Birth Date:</span> {{getUserInfo.birthdate}}</p>
             </panel>
         </v-flex>
         <v-flex xs12 md6>
@@ -74,6 +78,7 @@
                                       browser-autocomplete="username"
                                       @click='pickFile'
                                       v-model='imageName'
+                                      :error-messages="imageError"
                                       color="teal"
                                       prepend-icon='attach_file'
                                       @click:prepend="pickFile"/>
@@ -112,8 +117,8 @@
                            :disabled="!valid"
                            :dark="valid">submit</v-btn>
                     <v-btn @click="clear"
-                           class="teal"
-                           dark>clear</v-btn>
+                            class="teal"
+                            dark>clear</v-btn>
                 </v-form>
             </panel>
         </v-flex>
@@ -135,10 +140,10 @@ export default {
   data () {
     return {
       forms: {
-        birthdate: '',
+        nickname: '',
         lastName: '',
         firstName: '',
-        nickname: '',
+        birthdate: '',
         email: '',
         imageUrl: '',
         password: '',
@@ -146,6 +151,7 @@ export default {
       },
       valid: true,
       menu: false,
+      imageError: null,
       imageName: '',
       show1: false,
       show2: false,
@@ -167,41 +173,44 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['getUserEmail']),
+    ...mapGetters(['getUserInfo']),
     valOfProgress () {
       // count not null val * 100 / all count of forms
-      return (_.size(_.pickBy(this.forms, value => value !== '')) * 100) / _.size(this.forms)
+      return ((_.size(_.pickBy(this.getUserInfo, value => value !== null)) * 100) / _.size(this.getUserInfo)).toFixed(0)
     }
   },
   methods: {
-    submit () {
-      this.$refs.form.validate()
-    },
-    clear () {
-      this.imageName = ''
-      this.forms.birthdate = ''
-      this.forms.firstName = ''
-      this.forms.lastName = ''
-      this.forms.imageUrl = ''
-      this.forms.nickname = ''
-      this.forms.email = ''
-      this.forms.password = ''
-      this.forms.passwordConfirm = ''
+    async submit () {
+      if (this.$refs.form.validate()) {
+        let formData = new FormData()
+        // test data for form data
+        formData.append('name', 'Nikita')
+        let result = await ProfileService.post(formData)
+        console.log(result)
+      }
     },
     onFilePicked (e) {
       const files = e.target.files
       if (files[0] !== undefined) {
-        console.log(files[0])
-        this.imageName = files[0].name
-        if (this.imageName.lastIndexOf('.') <= 0) {
+        // check type of image
+        let typeOfMage = ['.jpg', '.jpeg', '.bmp', '.gif', '.png']
+        if (!typeOfMage.includes(files[0].name.substring(files[0].name.lastIndexOf('.')))) {
+          this.imageError = `Image must be in type: ${typeOfMage.join('/')}`
           return
         }
+        // check size of image max 5 mb
+        if (files[0].size > 5000000) {
+          this.imageError = `Max size of image is 5mb`
+          return
+        }
+        this.imageName = files[0].name
         const fr = new FileReader()
         fr.readAsDataURL(files[0])
-        fr.onload = (ev) => {
+        fr.onload = () => {
           this.forms.imageUrl = fr.result
         }
       } else {
+        this.imageError = 'You must a choose a file'
         this.imageName = ''
         this.forms.imageUrl = ''
       }
@@ -211,6 +220,18 @@ export default {
     },
     save (date) {
       this.$refs.menu.save(date)
+    },
+    clear () {
+      this.imageName = ''
+      this.imageError = ''
+      this.forms.birthdate = ''
+      this.forms.firstName = ''
+      this.forms.lastName = ''
+      this.forms.imageUrl = ''
+      this.forms.nickname = ''
+      this.forms.email = ''
+      this.forms.password = ''
+      this.forms.passwordConfirm = ''
     }
   },
   watch: {

@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import createPersistedState from 'vuex-persistedstate'
+import _ from 'lodash'
 
 Vue.use(Vuex)
 
@@ -16,6 +17,9 @@ export default new Vuex.Store({
     isUserLoggedIn: false
   },
   getters: {
+    getUserInfo (state) {
+      return _.pickBy(state.user, (val, key) => key !== 'id' && key !== 'createdAt' && key !== 'updatedAt' && key !== 'password')
+    },
     isUserLoggedIn (state) {
       return state.isUserLoggedIn
     },

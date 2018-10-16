@@ -67,10 +67,7 @@ module.exports = (app) => {
     isAuthenticated,
     ChatController.post)
 
-  app.get('/profile/:id',
-    isAuthenticated,
-    ProfileController.show)
-  app.post('/chat',
+  app.post('/profile',
     isAuthenticated,
     ProfileController.post)
 
