@@ -3,7 +3,8 @@
         <v-flex xs10 md6 offset-xs1 offset-md3>
             <panel title="Login">
                 <form name="tab-tracker-form"
-                      autocomplete="off">
+                      autocomplete="off"
+                      @keyup.enter="login">
                     <v-text-field
                             label="Email address"
                             v-model="email"

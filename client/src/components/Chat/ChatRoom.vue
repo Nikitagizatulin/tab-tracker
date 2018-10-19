@@ -23,7 +23,7 @@
                                                 row
                                                 :reverse="item.nickname === getUserEmail">
                                             <span class="subheading">{{item.nickname}}</span>
-                                            <span class="caption grey--text">{{ dateToJs(item.createdAt) }}</span>
+                                            <span class="caption grey--text">{{ item.createdAt | dateToJs }}</span>
                                         </v-layout>
                                     </v-list-tile-title>
                                     <v-list-tile-sub-title
@@ -118,9 +118,6 @@ export default {
     }
   },
   methods: {
-    dateToJs (sqlDate) {
-      return sqlDate ? new Date(sqlDate).toString().slice(0, 24) : ''
-    },
     clearMessage () {
       this.message = ''
     },
@@ -144,6 +141,11 @@ export default {
   watch: {
     message () {
       this.socket.emit('typing', this.getUserEmail)
+    }
+  },
+  filters: {
+    dateToJs (sqlDate) {
+      return sqlDate ? new Date(sqlDate).toString().slice(0, 24) : ''
     }
   }
 }

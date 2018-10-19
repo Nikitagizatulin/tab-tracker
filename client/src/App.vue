@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <v-app>
+      <preloader></preloader>
       <page-header/>
       <main>
         <v-container fluid grid-list-md>
@@ -18,11 +19,13 @@
 
 <script>
 import PageHeader from '@/components/Header'
+import Preloader from '@/components/globals/Preloader'
 
 export default {
   name: 'App',
   components: {
-    PageHeader
+    PageHeader,
+    Preloader
   }
 }
 </script>

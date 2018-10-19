@@ -1,14 +1,17 @@
 //  entry point
 require('dotenv').config()
-const epxress = require('express')
+const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const morgan = require('morgan')
 const { sequelize, Room, Chat } = require('./models')
 // initialize application
-const app = epxress()
+const app = express()
 
 // initialize morgan in express
+// statick files for user avatar
+app.use('/static', express.static(`${__dirname}/storage`))
+
 app.use(morgan('combined'))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ 'extended': 'false' }))

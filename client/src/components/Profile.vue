@@ -5,17 +5,26 @@
                 <v-avatar
                         :size="300"
                         color="black">
-                    <img src="https://picsum.photos/510/300?random" alt="avatar">
+                    <img :src="'http://localhost:8081/static/' + getUserInfo.image || '/static/user-default.jpg'" alt="avatar">
                 </v-avatar>
                 <p class="title mt-4" v-if="getUserInfo.email"><span class="grey--text">Email:</span> {{getUserInfo.email}}</p>
                 <p class="title mt-4" v-if="getUserInfo.nickname"><span class="grey--text">Nickname:</span> {{getUserInfo.nickname}}</p>
                 <p class="title mt-4" v-if="getUserInfo.firstName"><span class="grey--text">First Name:</span> {{getUserInfo.firstName}}</p>
                 <p class="title mt-4" v-if="getUserInfo.lastName"><span class="grey--text">Last Name:</span> {{getUserInfo.lastName}}</p>
-                <p class="title mt-4" v-if="getUserInfo.birthdate"><span class="grey--text">Birth Date:</span> {{getUserInfo.birthdate}}</p>
+                <p class="title mt-4" v-if="getUserInfo.birthdate"><span class="grey--text">Birth Date:</span> {{getUserInfo.birthdate | dateToJs}}</p>
             </panel>
         </v-flex>
         <v-flex xs12 md6>
             <panel title="Edit Profile">
+                <v-alert
+                        outline
+                        transition="scale-transition"
+                        :value="!!error || !!success"
+                        :type="error ? 'error':'success'"
+
+                >
+                    {{error || success | capitalize}}
+                </v-alert>
                 <v-form ref="form" v-model="valid" lazy-validation>
                     <v-text-field
                             v-model="forms.nickname"
@@ -73,7 +82,7 @@
                             :counter="50"/>
 
                     <v-flex xs12 class="text-xs-center text-sm-center text-md-center text-lg-center">
-                        <img :src="forms.imageUrl" height="150" v-if="forms.imageUrl"/>
+                        <img :src="imageUrl" height="150" v-if="imageUrl"/>
                         <v-text-field label="Select Image"
                                       browser-autocomplete="username"
                                       @click='pickFile'
@@ -117,8 +126,8 @@
                            :disabled="!valid"
                            :dark="valid">submit</v-btn>
                     <v-btn @click="clear"
-                            class="teal"
-                            dark>clear</v-btn>
+                           class="teal"
+                           dark>clear</v-btn>
                 </v-form>
             </panel>
         </v-flex>
@@ -132,7 +141,7 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
+import {mapGetters, mapActions} from 'vuex'
 import _ from 'lodash'
 import ProfileService from '@/services/ProfileService'
 
@@ -145,26 +154,29 @@ export default {
         firstName: '',
         birthdate: '',
         email: '',
-        imageUrl: '',
+        imageFile: '',
         password: '',
         passwordConfirm: ''
       },
       valid: true,
       menu: false,
-      imageError: null,
+      imageUrl: '',
       imageName: '',
+      imageError: null,
       show1: false,
       show2: false,
+      error: '',
+      success: '',
       rules: {
         emailRequired: [
-          v => v.length === 0 || /.+@.+/.test(v) || 'E-mail must be valid',
-          v => v.length === 0 || (v.length > 4 && v.length < 50) || 'E-mail must be more then 4 characters and less 50'
+          v => !v || v.length === 0 || /.+@.+/.test(v) || 'E-mail must be valid',
+          v => !v || v.length === 0 || (v.length > 4 && v.length < 50) || 'E-mail must be more then 4 characters and less 50'
         ],
         names: [
-          v => v.length === 0 || (v.length >= 2 && v.length < 50) || 'This input must be more then 2 characters and less 50'
+          v => !v || v.length === 0 || (v.length >= 2 && v.length < 50) || 'This input must be more then 2 characters and less 50'
         ],
         passwordRules: [
-          v => v.length === 0 || v.length > 8 || 'Password must be more than 8 characters'
+          v => !v || v.length === 0 || v.length > 8 || 'Password must be more than 8 characters'
         ],
         passwordConfirmRules: [
           v => v === this.forms.password || 'Password not match'
@@ -174,8 +186,10 @@ export default {
   },
   computed: {
     ...mapGetters(['getUserInfo']),
+    ...mapActions(['changePreloaderStatus']),
     valOfProgress () {
       // count not null val * 100 / all count of forms
+      console.log(_.pickBy(this.getUserInfo, value => value !== null))
       return ((_.size(_.pickBy(this.getUserInfo, value => value !== null)) * 100) / _.size(this.getUserInfo)).toFixed(0)
     }
   },
@@ -183,10 +197,21 @@ export default {
     async submit () {
       if (this.$refs.form.validate()) {
         let formData = new FormData()
-        // test data for form data
-        formData.append('name', 'Nikita')
-        let result = await ProfileService.post(formData)
-        console.log(result)
+
+        for (let key in this.forms) {
+          if (this.forms[key]) {
+            formData.append(key, this.forms[key])
+          }
+        }
+        try {
+          let result = await ProfileService.post(formData)
+          this.$store.dispatch('setToken', result.data.token)
+          this.$store.dispatch('setUser', result.data.user)
+          this.error = ''
+          this.success = `values(${result.data.countUpdate}) has been updated!`
+        } catch (error) {
+          this.error = error.response.data.error || 'Something went wrong! Please reload the page.'
+        }
       }
     },
     onFilePicked (e) {
@@ -203,16 +228,17 @@ export default {
           this.imageError = `Max size of image is 5mb`
           return
         }
+        this.forms.imageFile = files[0]
         this.imageName = files[0].name
         const fr = new FileReader()
         fr.readAsDataURL(files[0])
         fr.onload = () => {
-          this.forms.imageUrl = fr.result
+          this.imageUrl = fr.result
         }
       } else {
         this.imageError = 'You must a choose a file'
-        this.imageName = ''
-        this.forms.imageUrl = ''
+        this.forms.imageFile = ''
+        this.imageUrl = ''
       }
     },
     pickFile () {
@@ -222,21 +248,25 @@ export default {
       this.$refs.menu.save(date)
     },
     clear () {
+      this.imageUrl = ''
       this.imageName = ''
-      this.imageError = ''
-      this.forms.birthdate = ''
-      this.forms.firstName = ''
-      this.forms.lastName = ''
-      this.forms.imageUrl = ''
-      this.forms.nickname = ''
-      this.forms.email = ''
-      this.forms.password = ''
-      this.forms.passwordConfirm = ''
+      this.forms.imageFile = ''
+      this.$refs.form.reset()
     }
   },
   watch: {
     menu (val) {
       val && this.$nextTick(() => (this.$refs.picker.activePicker = 'YEAR'))
+    }
+  },
+  filters: {
+    capitalize: function (value) {
+      if (!value) return ''
+      value = value.toString()
+      return value.charAt(0).toUpperCase() + value.slice(1)
+    },
+    dateToJs (sqlDate) {
+      return new Date(sqlDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
     }
   }
 }

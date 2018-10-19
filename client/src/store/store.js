@@ -12,11 +12,13 @@ export default new Vuex.Store({
   ],
   strict: true,
   state: {
+    preloader: false,
     token: null,
     user: null,
     isUserLoggedIn: false
   },
   getters: {
+    getPreloader: (state) => state.preloader,
     getUserInfo (state) {
       return _.pickBy(state.user, (val, key) => key !== 'id' && key !== 'createdAt' && key !== 'updatedAt' && key !== 'password')
     },

@@ -2,7 +2,6 @@ const { Song } = require('../models')
 
 module.exports = {
   async index (req, res) {
-    console.log(req.url, 'asdasdasd')
     try {
       let song = null
       const search = req.query.search

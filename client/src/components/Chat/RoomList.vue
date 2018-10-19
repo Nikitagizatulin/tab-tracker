@@ -22,7 +22,7 @@
                     <template slot="items"
                               slot-scope="props">
                         <td>{{ props.item.room_name }}</td>
-                        <td>{{ dateToJs(props.item.createdAt) }}</td>
+                        <td>{{ props.item.createdAt | dateToJs }}</td>
                         <td>
                             <v-btn  @click.stop="joinRoom(props.item.id)"
                                     class="teal"
@@ -65,9 +65,6 @@ export default {
     this.rooms = (await ChatService.allRoom()).data
   },
   methods: {
-    dateToJs (sqlDate) {
-      return new Date(sqlDate).toString().slice(0, 24)
-    },
     async joinRoom (id) {
       this.$router.push({
         name: 'chat-room',
@@ -79,6 +76,11 @@ export default {
     ...mapGetters([
       'getUserEmail'
     ])
+  },
+  filters: {
+    dateToJs (sqlDate) {
+      return new Date(sqlDate).toString().slice(0, 24)
+    }
   }
 }
 </script>
