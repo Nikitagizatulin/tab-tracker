@@ -110,7 +110,7 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
   const authAlready = to.matched.some(record => record.meta.authAlready)
-  if ((requiresAuth && !store.getters.isUserLoggedIn) || (authAlready && store.getters.isUserLoggedIn)) {
+  if ((requiresAuth && !store.getters['authStore/isUserLoggedIn']) || (authAlready && store.getters['authStore/isUserLoggedIn'])) {
     next('/')
   } else {
     next()

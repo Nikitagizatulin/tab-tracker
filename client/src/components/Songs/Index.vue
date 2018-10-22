@@ -15,7 +15,8 @@ import SongsPanel from './SongsPanel'
 import SongsSearchPanel from './SongsSearchPanel'
 import SongsBookmarks from './SongsBookmarks'
 import RecentlyViewedSongs from './RecentlyViewedSongs'
-import { mapGetters } from 'vuex'
+import { createNamespacedHelpers } from 'vuex'
+const { mapGetters } = createNamespacedHelpers('authStore')
 
 export default {
   computed: {

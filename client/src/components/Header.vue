@@ -67,7 +67,8 @@
     </v-toolbar>
 </template>
 <script>
-import {mapGetters} from 'vuex'
+import { createNamespacedHelpers } from 'vuex'
+const { mapGetters } = createNamespacedHelpers('authStore')
 
 export default {
   computed: {
@@ -75,8 +76,8 @@ export default {
   },
   methods: {
     logOut () {
-      this.$store.dispatch('setToken', null)
-      this.$store.dispatch('setUser', null)
+      this.$store.dispatch('authStore/setToken', null)
+      this.$store.dispatch('authStore/setUser', null)
       this.$router.push({ name: 'songs' })
     }
   }

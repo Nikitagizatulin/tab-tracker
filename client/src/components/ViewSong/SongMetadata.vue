@@ -41,10 +41,10 @@
     </panel>
 </template>
 <script>
-import { mapGetters } from 'vuex'
+import { createNamespacedHelpers } from 'vuex'
 import BookmarkService from '@/services/BookmarkService'
 import _ from 'lodash'
-
+const { mapGetters } = createNamespacedHelpers('authStore')
 export default {
   data () {
     return {

@@ -63,8 +63,8 @@ export default {
           email: this.email,
           password: this.password
         })
-        this.$store.dispatch('setToken', response.data.token)
-        this.$store.dispatch('setUser', response.data.user)
+        this.$store.dispatch('authStore/setToken', response.data.token)
+        this.$store.dispatch('authStore/setUser', response.data.user)
         this.$router.push({
           name: 'songs'
         })

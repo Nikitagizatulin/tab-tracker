@@ -31,12 +31,18 @@ module.exports = {
     if (req.file) {
       filename = `${Date.now()}-${req.file.originalname}`
       await fs.writeFile(`./src/storage/${filename}`, req.file.buffer, 'ascii', err => {
-        if (err) return res.status(500).json('Something went wrong with uploading image')
+        if (err) {
+          return res.status(500).send({
+            error: 'Something went wrong with  uploading image'
+          })
+        }
       })
     }
 
     if (Object.keys(req.body).length === 0 && filename === '') {
-      return res.json('nothing to update')
+      return res.status(400).send({
+        error: 'nothing to update'
+      })
     } else {
       try {
         let newVal = {}

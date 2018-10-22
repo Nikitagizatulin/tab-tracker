@@ -5,7 +5,7 @@
                 <v-avatar
                         :size="300"
                         color="black">
-                    <img :src="'http://localhost:8081/static/' + getUserInfo.image || '/static/user-default.jpg'" alt="avatar">
+                    <img :src="userAvatar" alt="avatar">
                 </v-avatar>
                 <p class="title mt-4" v-if="getUserInfo.email"><span class="grey--text">Email:</span> {{getUserInfo.email}}</p>
                 <p class="title mt-4" v-if="getUserInfo.nickname"><span class="grey--text">Nickname:</span> {{getUserInfo.nickname}}</p>
@@ -141,9 +141,10 @@
 </template>
 
 <script>
-import {mapGetters, mapActions} from 'vuex'
+import { createNamespacedHelpers } from 'vuex'
 import _ from 'lodash'
 import ProfileService from '@/services/ProfileService'
+const {mapGetters} = createNamespacedHelpers('authStore')
 
 export default {
   data () {
@@ -186,18 +187,19 @@ export default {
   },
   computed: {
     ...mapGetters(['getUserInfo']),
-    ...mapActions(['changePreloaderStatus']),
     valOfProgress () {
       // count not null val * 100 / all count of forms
-      console.log(_.pickBy(this.getUserInfo, value => value !== null))
       return ((_.size(_.pickBy(this.getUserInfo, value => value !== null)) * 100) / _.size(this.getUserInfo)).toFixed(0)
+    },
+    userAvatar () {
+      return this.getUserInfo.image ? `http://localhost:8081/static/${this.getUserInfo.image}` : '/static/user-default.jpg'
     }
   },
   methods: {
     async submit () {
+      this.$store.dispatch('applicationStore/changePreloaderStatus', true)
       if (this.$refs.form.validate()) {
         let formData = new FormData()
-
         for (let key in this.forms) {
           if (this.forms[key]) {
             formData.append(key, this.forms[key])
@@ -205,13 +207,15 @@ export default {
         }
         try {
           let result = await ProfileService.post(formData)
-          this.$store.dispatch('setToken', result.data.token)
-          this.$store.dispatch('setUser', result.data.user)
+          debugger
+          this.$store.dispatch('authStore/setToken', result.data.token)
+          this.$store.dispatch('authStore/setUser', result.data.user)
           this.error = ''
           this.success = `values(${result.data.countUpdate}) has been updated!`
         } catch (error) {
-          this.error = error.response.data.error || 'Something went wrong! Please reload the page.'
+          this.error = error.response ? error.response.data.error : 'Something went wrong! Please reload the page.'
         }
+        this.$store.dispatch('applicationStore/changePreloaderStatus', false)
       }
     },
     onFilePicked (e) {

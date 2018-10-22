@@ -20,12 +20,13 @@
     </div>
 </template>
 <script>
-import { mapGetters } from 'vuex'
+import { createNamespacedHelpers } from 'vuex'
 import SongMetadata from './SongMetadata'
 import Tab from './Tab'
 import Lyric from './Lyric'
 import SongService from '@/services/SongService'
 import SongHistoryService from '../../services/SongHistoryService'
+const { mapGetters } = createNamespacedHelpers('authStore')
 
 const YouTube = () => import('./YouTube')
 

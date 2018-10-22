@@ -28,28 +28,22 @@
                         label="Genre*"
                         v-model="song.genre"/>
                 <v-text-field
-                        required
                         :rules="[
-                        required,
                         maxLength255
                         ]"
-                        label="Album*"
+                        label="Album"
                         v-model="song.album"/>
                 <v-text-field
-                        required
                         :rules="[
-                        required,
                         maxLength255
                         ]"
-                        label="AlbumImage*"
+                        label="AlbumImage"
                         v-model="song.albumImage"/>
                 <v-text-field
-                        required
                         :rules="[
-                        required,
                         maxLength255
                         ]"
-                        label="YouTubeId*"
+                        label="YouTubeId"
                         v-model="song.youTubeId"/>
             </panel>
         </v-flex>
@@ -58,18 +52,16 @@
             <panel title="Song Structure">
                 <v-textarea
                         :rules="[
-                        required,
-                        maxLength1000
+                        maxLength5000
                         ]"
-                        label="Lyrics*"
+                        label="Lyrics"
                         v-model="song.lyrics"
                 ></v-textarea>
                 <v-textarea
                         :rules="[
-                        required,
-                        maxLength1000
+                        maxLength5000
                         ]"
-                        label="Tab*"
+                        label="Tab"
                         v-model="song.tab"
                 ></v-textarea>
             </panel>
@@ -93,8 +85,8 @@ export default {
   data () {
     return {
       required: value => !!value || 'Required.',
-      maxLength255: v => (v && v.length <= 255) || 'Maximum length for this filed is 255 characters',
-      maxLength1000: v => (v && v.length <= 5000) || 'Maximum length for this filed is 5000 characters',
+      maxLength255: v => !v || (!!v && v.length <= 255) || 'Maximum length for this filed is 255 characters',
+      maxLength5000: v => !v || (!!v && v.length <= 5000) || 'Maximum length for this filed is 5000 characters',
       song: {
         title: null,
         artist: null,

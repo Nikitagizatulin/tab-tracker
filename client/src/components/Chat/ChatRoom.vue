@@ -70,7 +70,8 @@ import ChatService from '@/services/ChatService'
 import Vue from 'vue'
 import * as io from 'socket.io-client'
 import VueChatScroll from 'vue-chat-scroll'
-import { mapGetters } from 'vuex'
+import { createNamespacedHelpers } from 'vuex'
+const { mapGetters } = createNamespacedHelpers('authStore')
 
 Vue.use(VueChatScroll)
 

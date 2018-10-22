@@ -13,8 +13,10 @@
     </panel>
 </template>
 <script>
-import { mapGetters } from 'vuex'
 import BookmarkService from '../../services/BookmarkService'
+import { createNamespacedHelpers } from 'vuex'
+const { mapGetters } = createNamespacedHelpers('authStore')
+
 export default {
   data () {
     return {

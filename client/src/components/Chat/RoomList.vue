@@ -43,7 +43,8 @@
 
 <script>
 import ChatService from '@/services/ChatService'
-import { mapGetters } from 'vuex'
+import { createNamespacedHelpers } from 'vuex'
+const { mapGetters } = createNamespacedHelpers('authStore')
 export default {
   name: 'rooms',
   data () {

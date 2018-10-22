@@ -52,7 +52,8 @@
 </template>
 <script>
 import SongService from '@/services/SongService'
-import { mapGetters } from 'vuex'
+import { createNamespacedHelpers } from 'vuex'
+const { mapGetters } = createNamespacedHelpers('authStore')
 export default {
   data () {
     return {

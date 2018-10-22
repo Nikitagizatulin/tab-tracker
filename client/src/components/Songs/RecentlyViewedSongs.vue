@@ -14,8 +14,10 @@
     </panel>
 </template>
 <script>
-import { mapGetters } from 'vuex'
+import { createNamespacedHelpers } from 'vuex'
 import SongHistoryService from '../../services/SongHistoryService'
+const { mapGetters } = createNamespacedHelpers('authStore')
+
 export default {
   data () {
     return {
