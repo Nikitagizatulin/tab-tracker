@@ -26,8 +26,10 @@ module.exports = {
       const room = await Room.create(req.body)
       res.send(room)
     } catch (e) {
+      let err = 'An error has occured trying to create the room.'
+      if (e.name === 'SequelizeUniqueConstraintError') err = 'This room name has been used. Room name must be unique.'
       res.status(500).send({
-        error: 'An error has occured trying to create the room.'
+        error: err
       })
     }
   },

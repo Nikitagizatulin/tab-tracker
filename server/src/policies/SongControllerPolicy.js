@@ -15,11 +15,11 @@ module.exports = {
       title: Joi.string().required().min(3).max(255),
       artist: Joi.string().required().min(3).max(255),
       genre: Joi.string().required().min(3).max(255),
-      album: Joi.string().required().min(3).max(255),
-      albumImage: Joi.string().required().min(3).max(255),
-      youTubeId: Joi.string().required().min(3).max(255),
-      lyrics: Joi.string().required().min(3).max(5000),
-      tab: Joi.string().required().min(3).max(5000),
+      album: Joi.string().min(3).max(255).allow(''),
+      albumImage: Joi.string().min(3).max(255).allow(''),
+      youTubeId: Joi.string().min(3).max(255).allow(''),
+      lyrics: Joi.string().min(3).max(5000).allow(''),
+      tab: Joi.string().min(3).max(5000).allow(''),
       createdAt: Joi.date().allow(''),
       updatedAt: Joi.date().allow('')
     }

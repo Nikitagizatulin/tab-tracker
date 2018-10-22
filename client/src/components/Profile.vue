@@ -170,14 +170,14 @@ export default {
       success: '',
       rules: {
         emailRequired: [
-          v => !v || v.length === 0 || /.+@.+/.test(v) || 'E-mail must be valid',
-          v => !v || v.length === 0 || (v.length > 4 && v.length < 50) || 'E-mail must be more then 4 characters and less 50'
+          v => !v || v.trim().length === 0 || /.+@.+/.test(v) || 'E-mail must be valid',
+          v => !v || v.trim().length === 0 || (v.trim().length > 4 && v.trim().length < 50) || 'E-mail must be more then 4 characters and less 50'
         ],
         names: [
-          v => !v || v.length === 0 || (v.length >= 2 && v.length < 50) || 'This input must be more then 2 characters and less 50'
+          v => !v || v.trim().length === 0 || (v.trim().length >= 2 && v.trim().length < 50) || 'This input must be more then 2 characters and less 50'
         ],
         passwordRules: [
-          v => !v || v.length === 0 || v.length > 8 || 'Password must be more than 8 characters'
+          v => !v || v.trim().length === 0 || v.trim().length > 8 || 'Password must be more than 8 characters'
         ],
         passwordConfirmRules: [
           v => v === this.forms.password || 'Password not match'
@@ -215,8 +215,8 @@ export default {
         } catch (error) {
           this.error = error.response ? error.response.data.error : 'Something went wrong! Please reload the page.'
         }
-        this.$store.dispatch('applicationStore/changePreloaderStatus', false)
       }
+      this.$store.dispatch('applicationStore/changePreloaderStatus', false)
     },
     onFilePicked (e) {
       const files = e.target.files

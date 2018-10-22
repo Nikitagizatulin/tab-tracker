@@ -41,7 +41,7 @@
                     </v-btn>
                 </v-flex>
                 <v-flex xs6>
-                    <img :src="song.albumImage"
+                    <img :src="song.albumImage || '/static/mucis-default.png'"
                          alt="album-image"
                          class="album-image" />
                 </v-flex>

@@ -6,15 +6,14 @@ module.exports = {
       let song = null
       const search = req.query.search
       if (search) {
+        // find where title = %serch query% || artist = %serch query% and etc.
         song = await Song.findAll({
           where: {
             $or: ['title',
               'artist',
               'genre',
               'album'
-            ].map(item => ({
-              [item]: { $like: `%${search}%` }
-            })
+            ].map(item => ({ [item]: { $like: `%${search}%` } })
             )
           }
         })

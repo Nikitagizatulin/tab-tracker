@@ -10,6 +10,7 @@ const ProfileController = require('./controller/ProfileController')
 const isAuthenticated = require('./policies/IsAuthenticated')
 const ProfileImagePolicy = require('./policies/ProfileImagePolicy')
 const ProfileFieldsPolicy = require('./policies/ProfileFieldsPolicy')
+const RoomPolicy = require('./policies/RoomPolicy')
 
 module.exports = (app) => {
   app.post('/register',
@@ -57,6 +58,7 @@ module.exports = (app) => {
     RoomController.show)
   app.post('/room',
     isAuthenticated,
+    RoomPolicy,
     RoomController.post)
 
   app.get('/chat',

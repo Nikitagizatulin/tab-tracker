@@ -49,7 +49,7 @@ export default {
       ],
       passwordRequired: [
         v => !!v || 'Password is required',
-        v => v.length > 8 || 'Password must be more than 8 characters'
+        v => v.trim().length > 8 || 'Password must be more than 8 characters'
       ],
       email: '',
       password: '',
