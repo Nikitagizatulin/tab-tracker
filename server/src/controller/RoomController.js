@@ -14,7 +14,11 @@ module.exports = {
   async show (req, res) {
     try {
       const room = await Room.findById(req.params.roomId)
-      res.send(room)
+      if (!room) {
+        res.status(500).send({ error: 'This room does not exist' })
+      } else {
+        res.send(room)
+      }
     } catch (e) {
       res.status(500).send({
         error: 'An error has occured trying to fetch the room.'

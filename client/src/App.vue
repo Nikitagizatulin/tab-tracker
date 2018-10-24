@@ -56,4 +56,9 @@ export default {
     transform: translateX(100%);
     opacity: 0;
   }
+  /*style for chat message*/
+  div.v-list__tile.v-list__tile--avatar.theme--light{
+    height: auto;
+  }
+  /*______________________*/
 </style>

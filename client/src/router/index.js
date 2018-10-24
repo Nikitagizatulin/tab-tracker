@@ -15,6 +15,7 @@ import ChatRoom from '@/components/Chat/ChatRoom'
 import Profile from '@/components/Profile'
 
 import store from '@/store/store'
+import ChatService from '@/services/ChatService'
 
 Vue.use(Router)
 
@@ -89,6 +90,11 @@ const router = new Router({
       component: ChatRoom,
       meta: {
         requiresAuth: true
+      },
+      beforeEnter (to, from, next) {
+        ChatService.checkRoom(to.params.id)
+          .then(() => next())
+          .catch(() => next({ name: 'error' }))
       }
     },
     {
@@ -102,6 +108,7 @@ const router = new Router({
     //  default path
     {
       path: '*',
+      name: 'error',
       component: Error
     }
   ]

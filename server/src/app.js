@@ -58,7 +58,6 @@ sequelize.sync({})
             socket.on('save-message', data => {
               Chat.create(data)
                 .then(message => {
-                  console.log(message)
                   io.in(room.room_name).emit('new-message', { message: data })
                 })
                 .catch(err => {
