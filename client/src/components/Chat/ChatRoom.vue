@@ -12,24 +12,24 @@
                                 avatar>
                             <v-layout
                                     row
-                                    :reverse="item.nickname === getUserEmail">
+                                    :reverse="item.User.email === getUserEmail">
                                 <v-list-tile-avatar>
-                                    <img src="/static/user-default.jpg">
+                                    <img :src="item.system ? '/static/favicon.png' : item.User.image ? `http://localhost:8081/static/${item.User.image}` : '/static/user-default.jpg'">
                                 </v-list-tile-avatar>
 
                                 <v-list-tile-content>
                                     <v-list-tile-title
-                                            :class="item.nickname === getUserEmail ? 'text-xs-right' : ''">
+                                            :class="item.User.email === getUserEmail ? 'text-xs-right' : ''">
                                         <v-layout
                                                 row
-                                                :reverse="item.nickname === getUserEmail">
-                                            <span class="subheading">{{item.nickname}}</span>
+                                                :reverse="item.User.email === getUserEmail">
+                                            <span class="subheading">{{userName(item)}}</span>
                                             <span class="caption grey--text">{{ item.createdAt | dateToJs }}</span>
                                         </v-layout>
                                     </v-list-tile-title>
                                     <v-list-tile-sub-title
-                                            :class="item.nickname === getUserEmail ? 'text-xs-right' : ''">
-                                        <div :class="item.nickname === getUserEmail ? 'chat-message-right' : 'chat-message-left'"
+                                            :class="item.User.email === getUserEmail ? 'text-xs-right' : ''">
+                                        <div :class="item.User.email === getUserEmail ? 'chat-message-right' : 'chat-message-left'"
                                              class="fontForEmoji">
                                             {{ item.message}}
                                         </div>
@@ -37,7 +37,7 @@
                                 </v-list-tile-content>
                             </v-layout>
                         </v-list-tile>
-                        <v-divider inset :key="index + item.nickname" />
+                        <v-divider inset :key="index + item.User.email" />
                     </template>
                 </v-list>
                 <v-text-field
@@ -128,7 +128,7 @@ export default {
       message: '',
       socket: io('http://localhost:8081', {
         query: {
-          nickname: this.$store.getters['authStore/getUserEmail'],
+          user: JSON.stringify(this.$store.getters['authStore/getUserInfo']),
           room: this.$route.params.id
         }
       }),
@@ -147,7 +147,8 @@ export default {
     try {
       this.chats = (await ChatService.getMessages(this.$route.params.id)).data
       this.socket.on('new-message', data => {
-        this.chats.push(data.message)
+        data.User = JSON.parse(data.User)
+        this.chats.push(data)
       })
       this.socket.on('typing', data => {
         this.$set(this.typing, data.name, data.message)
@@ -169,11 +170,22 @@ export default {
     clearMessage () {
       this.message = ''
     },
+    userName (userObj) {
+      if (userObj.system) {
+        return 'System'
+      } else if (userObj.User.nickname) {
+        return userObj.User.nickname
+      } else if (userObj.User.firstName && userObj.User.lastName) {
+        return `${userObj.User.firstName} ${userObj.User.lastName}`
+      } else {
+        return userObj.User.email
+      }
+    },
     async onSubmit () {
       // send the message
       this.socket.emit('save-message', {
+        User: JSON.stringify(this.$store.getters['authStore/getUserInfo']),
         RoomId: this.$route.params.id,
-        nickname: this.getUserEmail,
         message: this.message,
         createdAt: new Date()
       })

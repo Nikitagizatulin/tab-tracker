@@ -1,4 +1,5 @@
 const { Chat } = require('../models')
+const { User } = require('../models')
 
 module.exports = {
   async index (req, res) {
@@ -16,10 +17,16 @@ module.exports = {
       const chat = await Chat.findAll({
         where: {
           RoomId: req.params.chatId
-        }
+        },
+        attributes: ['RoomId', 'message', 'createdAt'],
+        include: [{
+          model: User,
+          attributes: ['image', 'nickname', 'email', 'firstName', 'lastName']
+        }]
       })
       res.send(chat)
     } catch (e) {
+      console.log(e)
       res.status(500).send({
         error: 'An error has occured trying to fetch the chat.'
       })

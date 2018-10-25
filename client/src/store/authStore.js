@@ -9,7 +9,7 @@ export default {
   },
   getters: {
     getUserInfo (state) {
-      return _.pickBy(state.user, (val, key) => key !== 'id' && key !== 'createdAt' && key !== 'updatedAt' && key !== 'password')
+      return _.pickBy(state.user, (val, key) => key !== 'createdAt' && key !== 'updatedAt' && key !== 'password')
     },
     isUserLoggedIn (state) {
       return state.isUserLoggedIn

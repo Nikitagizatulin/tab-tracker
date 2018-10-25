@@ -31,22 +31,23 @@ sequelize.sync({})
 
       // connection event listener
       io.on('connection', socket => {
+        // socket.handshake contain user information which need to pass all of user in chat and room id
         Room.findById(socket.handshake.query.room)
           .then(room => {
             socket.join(room.room_name)
-
+            let user = JSON.parse(socket.handshake.query.user)
+            // if user nickname exist, use them, else we use first name + last name or email
+            let userName = user.nickname ? user.nickname : (user.firstName && user.lastName) ? `${user.lastName} ${user.firstName}` : user.email
             socket.broadcast.in(room.room_name).emit('new-message', {
-              message: {
-                message: `User ${socket.handshake.query.nickname} connected`,
-                nickname: 'System'
-              }
+              message: `User ${userName} connected`,
+              User: socket.handshake.query.user,
+              system: true
             })
             socket.on('disconnect', () => {
               socket.broadcast.in(room.room_name).emit('new-message', {
-                message: {
-                  message: `User ${socket.handshake.query.nickname} disconnected`,
-                  nickname: 'System'
-                }
+                message: `User ${userName} disconnected`,
+                User: socket.handshake.query.user,
+                system: true
               })
             })
             socket.on('typing', user => {
@@ -55,10 +56,16 @@ sequelize.sync({})
                 message: `${user} is typing...`
               })
             })
-            socket.on('save-message', data => {
+            socket.on('save-message', result => {
+              let data = {
+                message: result.message,
+                createdAt: result.createdAt,
+                RoomId: result.RoomId,
+                UserId: (JSON.parse(result.User)).id
+              }
               Chat.create(data)
                 .then(message => {
-                  io.in(room.room_name).emit('new-message', { message: data })
+                  io.in(room.room_name).emit('new-message', result)
                 })
                 .catch(err => {
                   console.log(err)
