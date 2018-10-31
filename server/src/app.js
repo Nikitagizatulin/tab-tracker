@@ -14,7 +14,7 @@ app.use('/static', express.static(`${__dirname}/storage`))
 
 app.use(morgan('combined'))
 app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ 'extended': 'false' }))
+app.use(bodyParser.urlencoded({ extended: true }))
 app.use(cors())
 
 require('./passport')
