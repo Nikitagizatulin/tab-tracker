@@ -2,6 +2,8 @@
 
 > A Vue.js & Node.js(v.10) project with ( Express.js, Passport.js, Vue-router, Vuex, Vuetify)
 
+![](https://github.com/Nikitagizatulin/tab-tracker/blob/ssr/readme_img.png)
+
 ## Build Setup
 
 ``` bash
